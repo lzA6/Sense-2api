@@ -1,0 +1,29 @@
+
+services:
+  app:
+    build: .
+    container_name: sense-2api-app
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    networks:
+      - sense-2api-net
+
+  nginx:
+    image: nginx:latest
+    container_name: sense-2api-nginx
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - app
+    networks:
+      - sense-2api-net
+
+networks:
+  sense-2api-net:
+    driver: bridge
